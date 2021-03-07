@@ -1,47 +1,64 @@
-// using System;
-// using LibraryBack.Repositorys;
+using System;
+using LibraryBack.Repositories;
 
-// namespace LibraryBack.Services
-// {
-//     public interface IUsersService
-//     {
-//         ResponseLoginModel LoginValidation(LoginModel requestLogin);
-//     }
-//     public class UsersService : IUsersService
-//     {
-//         private IUsersRepository _usersRepository;
-//         public UsersService(IUsersRepository usersRepository)
-//         {
-//             usersRepository = _usersRepository
-//         }
+namespace LibraryBack.Services
+{
+    public interface IUsersService
+    {
+        UsersListModel SelectAllUsersService();
+        ResposeLoginModel CheckValidateLogin(LoginModle login);
+        ResponseModel CheckStateRegister(UserModel register);
+    }
+    
+    public class UsersService : IUsersService
+    {
+        private IUsersRepository _usersRepository;
+        public UsersService(IUsersRepository usersRepository)
+        {
+            _usersRepository = usersRepository;
+        }
+     
+        public UsersListModel SelectAllUsersService()
+        {
+            UsersListModel result = _usersRepository.SelectAllUsers();
+            return result;
+        }
 
-//         public ResponseLoginModel LoginValidation(LoginModel requestLogin)
-//         {
-//             ResponseLoginModel res = new ResponseLoginModel();
-//             if (item.Username != "" && item.Password != "")
-//             {
-//                 var result = _userRepository.CheckLogin(request);
+        public ResposeLoginModel CheckValidateLogin(LoginModle login)
+        {
+            ResposeLoginModel response = new ResposeLoginModel();
+            int result = _usersRepository.SelectUserIdFromDB(login);
+            if (result == -1)
+            {
+                response.state = false;
+                response.message = "Login successful";
+                response.userId = -1;
+            }
+            else
+            {
+                response.state = true;
+                response.message = "Login failed";
+                response.userId = result;
+            }
+            return response;
+            
+        }
 
-//                 if (result == "")
-//                 {
-//                     res.state = false;
-//                     res.message = "Login fail";
-//                     res.id = -1;
-//                 }
-//                 else
-//                 {
-//                     res.state = true;
-//                     res.message = "Login success";
-//                     res.id = Int32.Parse(result);
-//                 }
-//             }
-//             else
-//             {
-//                 res.message = "Invalid Username or Password";
-//                 throw new Exception("Invalid Username or Password");
-//             }
-
-//             return res;
-//         }
-//     }
-// }
+        public ResponseModel CheckStateRegister(UserModel register) 
+        {
+            ResponseModel response = new ResponseModel();
+            int result =_usersRepository.InsertUserDetails(register);
+            if(result > 0)
+            {
+                response.state = true;
+                response.message = "Register successful";
+            }
+            else
+            {
+                response.state = true;
+                response.message = "Register failed";
+            }
+            return response;
+        }
+    }
+}
