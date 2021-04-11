@@ -31,13 +31,13 @@ namespace LibraryBack.Services
             if (result == -1)
             {
                 response.state = false;
-                response.message = "Login successful";
+                response.message = "Login failed";
                 response.userId = -1;
             }
             else
             {
                 response.state = true;
-                response.message = "Login failed";
+                response.message = "Login successful";
                 response.userId = result;
             }
             return response;

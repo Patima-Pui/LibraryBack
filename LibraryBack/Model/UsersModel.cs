@@ -20,14 +20,6 @@ namespace LibraryBack
         public List<UserModel> UsersList { get; set; }
     }
 
-    // public class RegUserModel : UserModel
-    // {
-    //     public DateTime upsertTime { get; set; }
-    //     public string upsertName { get; set; }
-    //     public DateTime updateTime { get; set; }
-    //     public string updateName { get; set; }
-    // }
-
     public class LoginModle
     {
         public string username { get; set; }
